@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #486684;
+            transition: 0.3s;
+            padding-top: 60px;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar .section {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 16px;
+            color: white;
+            display: block;
+            transition: 0.2s;
+        }
+
+        .sidebar .section:hover {
+            background-color: #18598e;
+        }
+
+        .hamburger {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 100;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #486684;
+            margin: 5px 0;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+            background-color: white;
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+            background-color: white;
+        }
+
+        .hamburger.active {
+            width: 256px;
+        }
+        .content {
+            margin-left: 0;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        .content.active {
+            margin-left: 250px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .content.active {
+                margin-left: 0;
+            }
+        }
+
+        div {
+            padding: 10px;
+        }
+
+        h1, h2, h3 {
+            color: #486684;
+        }
+
+        hr {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        #accueil {
+            margin-top: 25px;
+            margin-left: 256px;
+            font-size: 200%;
+            display: flex;
+            justify-content: space-between;
+        }
+        h3, h4 {
+            font-size: 150%;
+            margin-bottom: 20px;
+        }
+        h5 {
+            font-size: 140%;
+        }
+        p {
+            font-size: 150%;
+        }
+        .parcours-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .parcours-item{
+            box-shadow: 0 0 5px;
+            border-radius: 25px;
+            width: 600px;
+            margin-top: 5px; 
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between 5px;
+            align-items: center;
+        }
+
+        .parcours-image{
+            margin-right: 20px;
+        }
+        .langages-container, .logiciels-container, .sys-container {
+            display: flex;
+            justify-content: space-around;
+            width: 800px;
+            margin: auto;
+        }
+        .langages-item, .logiciels-item, .sys-item {
+            justify-content: center;
+            text-align: center;
+            margin-right: 5px;
+            transition: .2s;
+        }
+        .langages-item:hover, .logiciels-item:hover, .sys-item:hover{
+            transform: scale(1.2);
+        }
+        .projets-container {
+            margin: 20px auto;
+            width: 100%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-row: auto auto;
+            grid-column-gap: 20px;
+            grid-row-gap: 20px;
+        }
+        
+        .projets-item {
+            text-align: center;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .projets-item video {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border: none;
+            border-radius: 5px;
+            display: block;
+        }
+        
+        /* Ajustements pour le menu ouvert */
+        .content.active .projets-container {
+            max-width: calc(100vw - 300px);
+        }
+        
+        .content.active .projets-item video {
+            max-width: min(500px, calc((100vw - 350px) / 2 - 20px));
+        }
+        
+        @media screen and (max-width: 1200px) {
+            .projets-container {
+                grid-template-columns: 1fr;
+                max-width: 800px;
+            }
+            
+            .content.active .projets-container {
+                max-width: 700px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .projets-container {
+                grid-template-columns: 1fr;
+                width: 95%;
+            }
+            
+            .projets-item video {
+                max-width: 100%;
+            }
+            
+            .content.active .projets-container {
+                max-width: 95%;
+            }
+        }
+        
+        #cv {
+            width: 200px;
+            height: 50px;
+            font-size: 110%;
+            font-family:Arial, Helvetica, sans-serif;
+            background-color: #f0f0f0;
+            border: 1px solid #18598e;
+            border-radius: 25px;
+            box-shadow: 0 0 2px;
+        }
+        #cv:hover {
+            background-color: #e6e6e6;
+            cursor: pointer;
+        }
+        .reseaux {
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            width: 70%;
+            margin: auto;
+            margin-top: 10px;
+            height: 40px;
+            align-items: center;
+            border-radius: 25px;
+        }
+        .copy {
+            margin: auto;
+            justify-content: center;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .social-link {
+            cursor: pointer;
+            z-index: 1000;
+            position: relative;
+        }
+
+        .social-link img {
+            transition: transform 0.2s;
+        }
+
+        .social-link:hover img {
+            transform: scale(1.1);
+        }
+        .img-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 0;
+            width: 100%;
+        }
+        .veille {
+            text-align: center;
+        }
+        .contact-container {
+            display: flex;
+            justify-content: space-around;
+        }
+        .contact-item {
+            height: 500px;
+            display:flex;
+            flex-direction: column;
+        }
+        .contact-item2 {
+            height: 700px;
+            width: 600px;
+            display:flex;
+            flex-direction: column;
+            justify-content: space-around;
+            border: #0b67c3 1px solid;
+            background-color: white;
+            text-align: center;
+            align-items: center;
+            border-radius: 25px;
+        }
+        input {
+            width: 400px;
+            height: 30px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+        }
+        textarea {
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            height: 200px;
+            width: 400px;
+            max-height: 200px;
+            max-width: 400px;
+            min-height: 200px;
+            min-width: 400px;
+        }
+        label {
+            font-size: larger;
+        }
+        #formsubmit {
+            width: 170px;
+            height: 30px;
+            border: none;
+            color: white;
+            background-color: #557793;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        #formsubmit:hover {
+            background-color: #486684;
+            cursor: pointer;
+        }
+        .reveal {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.8s ease;
+    }
+    
+        .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .alert {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        width: 80%;
+        text-align: center;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert p {
+        margin: 0;
+        font-size: 16px;
+    }
+    .leformulaire {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    </style>
+</head>
+<body>
+    <button class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+<br>
+    <nav class="sidebar">
+        <a class="section" style="margin-top:30px;"href="#accueil">ACCUEIL</a>
+        <a class="section" href="#profil">PROFIL</a>
+        <a class="section" href="#bts-sio">BTS SIO</a>
+        <a class="section" href="#parcours">PARCOURS SCOLAIRE</a>
+        <a class="section" href="#certifications">CERTIFICATIONS</a>
+        <a class="section" href="#competences">COMPETENCES</a>
+        <a class="section" href="#projets">PROJETS</a>
+        <a class="section" href="#experiences">EXPERIENCES PROFESSIONNELLES</a>
+        <a class="section" href="#veille">VEILLE TECHNOLOGIQUE</a>
+        <a class="section" href="#contact">CONTACT</a>
+            
+            <div class="reseaux">
+                <a href="https://www.instagram.com/rayan.dafi/" target="_blank" class="social-link">
+                    <img src="img/instagram.png" alt="Instagram" width="24" height="24">
+                </a>
+                <a href="https://x.com/Rayan750_" target="_blank" class="social-link">
+                    <img src="img/x.png" alt="X (Twitter)" width="24" height="24">
+                </a>
+                <a href="https://github.com/gisby28" target="_blank" class="social-link">
+                    <img src="img/github.png" alt="GitHub" width="24" height="24">
+                </a>
+                <a href="https://fr.linkedin.com/in/rayan-dafi-4782a7233" target="_blank" class="social-link">
+                    <img src="img/linkedin.png" alt="LinkedIn" width="24" height="24">
+                </a>
+            </div>
+            <div class="copy">
+                <h6 style="color:white;"> &copy; Copyright 2025 | Rayan DAFI </h6><br>
+                <h6 style="color:white"> Tous droits réservés.</h6>
+            </div>
+        </nav>
+
+    <div id="accueil" class="reveal">
+        <div class="title">
+        <h1>Rayan DAFI</h1>
+        <h2>Bienvenue sur mon portfolio</h2>
+        </div>
+        <div class="image">
+        <img style="border-radius:50%" src="img/pp.jpg" width="150px">
+        </div>
+        </div>
+    <div class="content">
+        <hr>
+            <div id="profil" class="reveal">
+                <h3>PRÉSENTATION</h3>
+                <p>Je m'appelle Rayan Dafi, et je suis étudiant en première année de BTS SIO (Services Informatiques aux Organisations), spécialité SLAM (Solutions Logicielles et Applications Métiers).</p>
+                <p>Je suis alternant et je travaille au sein de l'entreprise playBac en tant que support technique informatique.</p><br>
+                <form class="CV"><br>
+                    <p>Cliquez<a href="docs/cvrd.pdf" download style="text-decoration: none; font-weight:bold; color:#0b67c3;"> ici</a> pour télécharger mon CV.</p>
+                </form>
+
+            </div>
+        
+        <hr>
+            <div id="bts-sio" class="reveal">
+                <h3>QU'EST CE QUE LE BTS SIO ?</h3>
+                <p>Le BTS SIO (Brevet de Technicien Supérieur en Services Informatiques aux Organisations) est un diplôme français de niveau Bac+2 qui forme des spécialistes en informatique, capables de répondre aux besoins des entreprises en matière de gestion des systèmes d'information.</p><br>
+                <p>La spécialité SLAM (Solutions Logicielles et Applications Métiers) forme des techniciens orientés développement, capables de créer, gérer et maintenir des applications logicielles adaptées aux besoins des organisations.</p><br>
+                <p>Les diplômés du BTS SIO peuvent exercer des métiers tels que technicien informatique, administrateur systèmes et réseaux, développeur, chef de projet informatique junior, etc. Ce diplôme permet également de poursuivre des études en licence professionnelle ou dans d’autres formations supérieures.</p><br>
+                <p>Le BTS SIO propose aussi une autre spécialisation: SISR (Solutions d'Infrastructure, systèmes et réseaux). Celle-ci prépare à la gestion et à l'administration des systèmes informatiques et des réseaux, ainsi qu'à l'installation, la configuration et la maintenance des équipements.</p>
+            </div>
+        
+        <hr>
+            <div id="parcours" class="reveal">
+                <h3>PARCOURS SCOLAIRE</h3>
+                <div class="parcours-container">
+                    <div class="parcours-item">
+                    <a href="https://pia.ac-paris.fr/serail/jcms/s2_94920/fr/accueil"><img class="parcours-image" src="img/hb.png" width="100px"></a>
+                    <p>Lycée Hélène Boucher - Baccalauréat scientifique. <em style="font-size: 60%;">2017-2020</em></p>
+                    </div>
+                    <div class="parcours-item">
+                    <a href="https://u-paris.fr/"><img class="parcours-image" src="img/UPC.png" width="100px"></a>
+                    <p>Université Paris Cité - Licence P.A.S.S (Parcours d'accès spécifique santé) - Première année. <em style="font-size: 60%;">2020-2021</em></p>
+                    </div>
+                    <div class="parcours-item">
+                    <a href="https://u-paris.fr/"><img class="parcours-image" src="img/UPC.png" width="100px"></a>
+                    <p>Université Paris Cité - Licence Physique - Première et deuxième année. <em style="font-size: 60%;">2022-2024</em></p>
+                    </div>
+                    <div class="parcours-item">
+                    <a href="https://www.insta.fr/"><img class="parcours-image" src="img/insta.png" width="100px"></a>
+                    <p>INSTA - BTS SIO - Première année. <em style="font-size: 60%;">2024-2026</em></p>
+                    </div>
+                </div>
+            </div>
+        
+        <hr>
+            <div id="certifications" class="reveal">
+                <h3>CERTIFICATIONS</h3>
+
+                <p>Aucune certification passées pour le moment. Je suis en ce moment le cours proposé par FreeCodeCamp et j'envisage de passer une certification AWS. </p>
+        
+            </div> 
+        
+        <hr>
+            <div id="competences" class="reveal">
+                <h3>COMPÉTENCES - Langages et logiciels</h3>
+                <h4 style="text-align: center;">Langages</h4>
+                <div class="langages-container">
+                    <div class="langages-item">
+                        <img src="img/HTML.png" width="100px">
+                    </div>
+                    <div class="langages-item">
+                        <img src="img/CSS.png" width="100px">
+                    </div>
+                    <div class="langages-item">
+                        <img src="img/PHP.png" width="100px">
+                    </div>
+                    <div class="langages-item">
+                        <img src="img/JS.png" width="100px">
+                    </div>
+                    <div class="langages-item">
+                        <img src="img/CS.png" width="100px">
+                    </div>
+                </div>
+
+                <h4 style="text-align: center;">Logiciels</h4>
+                <div class="logiciels-container">
+                    <div class="logiciels-item">
+                        <img src="img/MAMP.png" width="100px">
+                    </div>
+                    <div class="logiciels-item">
+                        <img src="img/WAMP.png" width="100px">
+                    </div>
+                    <div class="logiciels-item">
+                        <img src="img/Ind.png" width="100px">
+                    </div>
+                    <div class="logiciels-item">
+                        <img src="img/vsc.png" width="100px">
+                    </div>
+                    <div class="logiciels-item">
+                        <img src="img/office365.png" width="100px">
+                    </div>
+                </div>
+                <h4 style="text-align: center;">Systèmes d'exploitations</h4>
+                <div class="sys-container">
+                    <div class="sys-item">
+                        <img src="img/macos.png" width="110px">
+                    </div>
+                    <div class="sys-item">
+                        <img src="img/windows.png" width="100px">
+                    </div>
+                </div>
+            </div>
+        
+        <hr>
+            <div id="projets" class="reveal">
+                <h3>PROJETS</h3>
+                <div class="projets-container">
+                <div class="projets-item">
+                <h4>Entreprise - Base de données  pour le support informatique</h4>
+                <video controls src="videos/bdd_support.mov" poster="img/bddsupport.png" width="640px" height="360px" style="border:none; border-radius:5px; display: block; margin: auto;"></video>
+                </div>
+                <div class="projets-item">
+                <h4>Entreprise - Base de données pour la gestion du matériel </h4>
+                <video controls src="videos/bdd_materiel.mov" poster="img/bddmateriel.png" width="640px" height="360px" style="border:none; border-radius:5px; display: block; margin: auto;"></video>
+                </div>
+                <div class="projets-item">
+                <h4>Ecole - Flappy Bird (1 et 2 joueurs)</h4>
+                <video controls src="videos/flappy.mp4" poster="img/flappy.jpg" width="640px" height="360" style="border:none; border-radius:5px; display: block; margin: auto;"></video>
+                </div>
+                <div class="projets-item">
+                <h4>Ecole - Tetris</h4>
+                <video controls src="videos/tetris.mp4" poster="img/tetris.jpg" width="640px" height="360px" style="border:none; border-radius:5px; display: block; margin: auto;"></video>
+                </div>
+                </div>
+                <hr>
+                <h3>ET POUR LA SUITE ?</h3>
+        
+                <p>J'aimerais poursuivre mes études au minimum jusqu'au Bac + 5. J'aimerais tout d'abord faire un bachelor après mon BTS, puis enchainer sur un Master. Je suis interessé par la cybersécurité, donc une réorientation en bachelor cybersécurité, suivi d'un Master dans le même domaine reste une possibilité pour moi.</p><br>
+                <p>Mon projet professionnel suite à mes études dépendra de mon parcours, pour le moment, je me verrais commencer à travailler dans une entreprise en exerçant dans le domaine de mes trois dernières années d'études, puis me lancer en "Freelance" par la suite après avoir emmagasiné de l'expérience.</p>
+        
+            </div>
+        
+        <hr>
+            <div id="experiences" class="reveal">
+                <h3>EXPERIENCES PROFESSIONNELLES</h3>
+                <div class="experiences-container">
+                    <div class="experiences-item">
+                        
+                        <h4><img src="img/carrefour.png" width="50px" style="margin-right: 15px;"> Carrefour - Caissier / Assistant manager <br><em style="font-size: 70%;">Juillet 2021 - Septembre 2023 / Juin 2024 - Aout 2024</em></h4>
+                        <p style="font-size:130%">- Gestion des réclamations et des retours de produits</p>
+                        <p style="font-size:130%">- Encaissement et gestion des paiements</p>
+                        <p style="font-size:130%">- Relais entre les clients et les assistants de caisse</p>
+                        <p style="font-size:130%">- Pro-actif dans la recherche d'anomalies pour faciliter le parcours client</p>
+                    </div>
+                    <div class="experiences-item">
+                        <h4><img src="img/pbp.png" width="90px" style="margin-right: 15px;"> PlayBac - Technicien informatique <br><em style="font-size: 70%;">Septembre 2024 - Septembre 2026</em></h4>
+                        <p style="font-size:130%">- Gestion de l'inventaire de matériel informatique</p>
+                        <p style="font-size:130%">- Développement de bases de données pour le support informatique et la gestion du matériel</p>
+                        <p style="font-size:130%">- Résolution de problèmes informatiques et réseaux lié au matériel</p>
+                        <p style="font-size:130%">- Recomposition d'anciennes archives de journaux</p>
+                    </div>
+                </div>
+                 
+            </div>
+        
+        <hr>
+            <div id="veille" class="reveal">
+                <div class="veille">
+                <h3>VEILLE TECHNOLOGIQUE</h3>
+        
+                <h3 style="text-align: center;">Sujet : L'impact de l'Intelligence Artificielle dans le développement logiciel</h3>
+                <p><strong style="color:#225383">L'intelligence artificielle</strong> (IA) transforme progressivement le monde du développement logiciel. De la génération automatique de code à l'optimisation des performances, elle redéfinit le rôle du développeur. 
+                    Cette veille technologique explore les dernières avancées de l'IA appliquées au développement logiciel, leurs avantages et leurs limites.</p><br><br><br>
+
+                <h4>L'IA au service du développeur</h4>
+                <h5>Outils d'assistance au codage :</h5>
+                <p>Des outils basés sur l'IA aident désormais les développeurs dans la rédaction et l'optimisation de leur code.</p>
+                <p>Parmi les plus populaires, on a par exemple <strong style="color:#225383">GitHub Copilot, ChatGPT et Tabnine</strong>.</p><br>
+                    <div class="img-container">
+                        <img src="img/chatgpt.png" height="100px">
+                        <img src="img/copilot.png" height="100px">
+                        <img src="img/tabnine.png" height="100px">
+                    </div><br><br>
+                <h5>Tests et débogage automatisés</h5>
+                <p>L'IA permet aussi d'automatiser des tests logiciels et de détecter des erreurs plus efficacement :</p>
+                <p><strong style="color:#225383">Diffblue Cover</strong> : génère des tests unitaires pour Java.</p>
+                <p><strong style="color:#225383">DeepCode</strong> : analyse le code pour identifier des vulnérabilités.</p><br>
+                    <div class="img-container">
+                        <img src="img/diffblue.png" height="100px">
+                        <img src="img/deepcode.png" height="100px">
+                    </div><br><br>
+                <h5>L'IA et la cybersécurité</h5>
+                <p>Les outils d'IA peuvent identifier des failles de sécurité avant qu'elles ne soient exploitées :</p>
+                <p><strong style="color:#225383">Snyk</strong> : scanne le code pour détecter des vulnérabilités connues.</p>
+                <p><strong style="color:#225383">Dependabot</strong> : met à jour les dépendances pour prévenir les failles de sécurité.</p><br><br><br>
+                <div class="img-container">
+                    <img src="img/snyk.png" height="100px">
+                    <img src="img/dependabot.png" height="100px">
+                </div><br><br>
+                <h5>Amélioration des performances et optimisation du code</h5>
+                <p>L'IA permet d'optimiser le code en termes de performance et de consommation de ressources :</p>
+                <p><strong style="color:#225383">AI Code Reviewer</strong> : suggère des améliorations pour le code.</p>
+                <p><strong style="color:#225383">TensorFlow</strong> et PyTorch</strong> : facilitent l'intégration de l'IA dans des applications.</p><br><br><br>
+                <div class="img-container">
+                    <img src="img/aicodereviewer.png" height="100px">
+                    <img src="img/tensorflow.png" height="100px">
+                    <img src="img/pytorch.png" height="100px">
+                </div><br><br>
+                <h5>Éthique et limites de l'IA dans le développement</h5>
+                <p>Malgré ses avantages, l'utilisation de l'IA soulève certaines questions :</p>
+                <p><strong style="color:#225383">Plagiat et propriété intellectuelle</strong> : qui possède le code généré par IA ?</p>
+                <p><strong style="color:#225383">Dépendance à l'IA</strong> : les développeurs risquent-ils de perdre certaines compétences fondamentales ?</p><br><br><br>
+                <div class="img-container">
+                    <img src="img/iapropriete.png" width="100%">
+                </div><br><br>
+                <h5>Conclusion</h5>
+                <p>L'intégration de l'IA dans le développement logiciel est une révolution en cours, offrant des gains de productivité tout en posant des défis éthiques et techniques. 
+                    La veille technologique reste essentielle pour suivre ces évolutions et anticiper leur impact sur le métier de développeur.</p>
+                </div>
+                </div>
+        
+        <hr>
+            <div id="contact" class="reveal">
+                <h3>CONTACT</h3>
+                <div class="contact-container">
+                    <div class="contact-item">
+                 <h4>Rayan DAFI :</h4>
+                 <p>Mail : <a href="mailto:rayandafi28@gmail.com">rayandafi28@gmail.com</a></p>
+                 <p>Téléphone : <a href="tel:+33660155891">06 60 15 58 91</a></p><br>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.7007084218535!2d2.351974076304891!3d48.84484727133032!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e67183e07d1b5f%3A0xf8c2db1824821c7e!2sINSTA%20-%20CFA%20-%20Ecole!5e0!3m2!1sfr!2sfr!4v1750060619802!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>                </div>
+                <div class="contact-item2">
+                        
+                        <!-- Messages de statut -->
+                        <div id="success-message" class="alert alert-success" style="display: none;">
+                            <p>Votre message a été envoyé avec succès !</p>
+                        </div>
+                        <div id="error-message" class="alert alert-error" style="display: none;">
+                            <p>Une erreur est survenue lors de l'envoi du message.</p>
+                        </div>
+
+                    <h3 style="font-size: 200%;">Formulaire de contact</h3>
+                    <div class="leformulaire">
+
+                    <form action="https://formsubmit.co/rayandafi28@gmail.com" method="POST">
+                    <div class="form-group">
+                        <label for="email">Email :</label><br>
+                        <input type="email" placeholder="Indiquez votre mail ici" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Sujet :</label><br>
+                        <input type="text" placeholder="Indiquez le sujet du message ici" id="subject" name="subject" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message :</label><br>
+                        <textarea id="message" placeholder="Ecrivez votre message ici" name="message" rows="5" required></textarea>
+                    </div>
+
+                    <button id="formsubmit" type="submit">Envoyer</button>
+                </div>
+                </div>
+                </form>
+                </div>
+            </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.querySelector('.hamburger');
+    const sidebar = document.querySelector('.sidebar');
+    const content = document.querySelector('.content');
+    const navLinks = document.querySelectorAll('.sidebar a:not(.social-link)'); // Exclure les liens sociaux
+
+    // Add a style for the active nav link
+    const style = document.createElement('style');
+    style.textContent = `
+        .sidebar a.active {
+            background-color: #18598e;
+            font-weight: bold;
+        }
+        .social-link.active {
+            background-color: transparent !important;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Toggle menu function
+    function toggleMenu() {
+        hamburger.classList.toggle('active');
+        sidebar.classList.toggle('active');
+        content.classList.toggle('active');
+    }
+
+    // Attach toggle menu functionality
+    hamburger.addEventListener('click', toggleMenu);
+
+    // Function to update active link
+    function updateActiveLink() {
+        // Get all sections
+        const sections = document.querySelectorAll('div[id]');
+        
+        // Remove active class from all navigation links first
+        navLinks.forEach(link => link.classList.remove('active'));
+
+        // Find the section currently in view
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            
+            // Check if section is in the viewport (slightly from top)
+            if (rect.top <= 100 && rect.bottom >= 100) {
+                // Find and activate the corresponding nav link
+                const activeLink = document.querySelector(`.sidebar a[href="#${section.id}"]:not(.social-link)`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        });
+    }
+
+    // Smooth scrolling for navigation links only
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default anchor behavior
+            
+            // Close the sidebar on mobile after link click
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+
+            // Get the target section ID from the href attribute
+            const targetId = link.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                // Smooth scroll to the target section
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+                // Update active link after scroll
+                setTimeout(updateActiveLink, 300);
+            }
+        });
+    });
+
+    // Update active link on scroll
+    window.addEventListener('scroll', updateActiveLink);
+
+    // Initial call to set first active link
+    updateActiveLink();
+});
+const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.reveal').forEach((element) => {
+                observer.observe(element);
+            });
+            function getURLParameters() {
+    const hashParams = window.location.hash.split('?')[1];
+    if (!hashParams) return {};
+    
+    const params = {};
+    hashParams.split('&').forEach(param => {
+        const [key, value] = param.split('=');
+        params[key] = value;
+    });
+    return params;
+}
+
+// Fonction pour afficher les messages
+function showFormMessages() {
+    const params = getURLParameters();
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+    
+    // Cacher les deux messages par défaut
+    successMessage.style.display = 'none';
+    errorMessage.style.display = 'none';
+    
+    // Afficher le message approprié
+    if (params.success === '1') {
+        successMessage.style.display = 'block';
+        // Faire défiler jusqu'au message
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Effacer le paramètre de l'URL après 5 secondes
+        setTimeout(() => {
+            window.location.hash = 'contact';
+            successMessage.style.display = 'none';
+        }, 5000);
+    } else if (params.error === '1') {
+        errorMessage.style.display = 'block';
+        // Faire défiler jusqu'au message
+        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Effacer le paramètre de l'URL après 5 secondes
+        setTimeout(() => {
+            window.location.hash = 'contact';
+            errorMessage.style.display = 'none';
+        }, 5000);
+    }
+}
+
+// Exécuter la fonction au chargement de la page
+document.addEventListener('DOMContentLoaded', showFormMessages);
+
+// Exécuter la fonction quand le hash de l'URL change
+window.addEventListener('hashchange', showFormMessages);
+</script>
+</body>
+</html>
