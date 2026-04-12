@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Rayan DAFI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Palette de couleurs */
+            --bg-dark: #0b1a12;        /* Vert très foncé (fond principal) */
+            --bg-card: #14281f;        /* Vert forêt (sections/cartes) */
+            --accent-red: #7b1113;     /* Rouge Bordeaux (Boutons/Titres) */
+            --accent-red-hover: #9c1c1f;
+            --text-light: #e8ece9;     /* Blanc cassé */
+            --text-muted: #a3b8ad;     /* Gris-vert clair */
+            --border-color: #2c4a3b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden; /* Empêche le scroll horizontal sur mobile */
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-light);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(11, 26, 18, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Logo RD. rétabli */
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            border: 2px solid var(--accent-red); /* Petit rappel du rouge */
+            padding: 5px 10px;
+            letter-spacing: 2px;
+        }
+
+        .logo:hover {
+            background-color: var(--accent-red);
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-red);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+
+        /* --- Hero Section --- */
+        #accueil {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(11, 26, 18, 0.85), rgba(11, 26, 18, 0.95)), url('img/code-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            padding-top: 80px; /* Pour compenser la navbar */
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .hero-content img.profile-pic {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.5); /* Ombre douce sans bordure rouge */
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 5px;
+            line-height: 1.1;
+        }
+
+        /* Style spécifique pour la signature */
+        .hero-signature {
+            width: 90px; /* Taille contrôlée */
+            max-width: 80%; /* Responsive sur très petits écrans */
+            height: auto;
+            margin: 0 auto 20px auto; /* Centrée avec marge en bas */
+            display: block;
+            border: none !important; /* Force la suppression de bordure */
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); /* Légère ombre pour détacher du fond */
+        }
+
+        .hero-content h2 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent-red);
+            color: white;
+            border-radius: 5px;
+            font-weight: 600;
+            margin: 10px;
+            border: 1px solid var(--accent-red);
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--accent-red);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--text-light);
+            color: var(--text-light);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--text-light);
+            color: var(--bg-dark);
+        }
+
+        /* --- Sections Generales --- */
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h3 {
+            font-size: 2rem;
+            text-transform: uppercase;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .section-title h3::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-red);
+            margin: 10px auto 0;
+        }
+
+        /* --- Grids & Layouts --- */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-red);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* --- Timeline --- */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--accent-red);
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            left: 12px;
+            background-color: var(--bg-dark);
+            border: 3px solid var(--accent-red);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-content {
+            background-color: var(--bg-card);
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--accent-red);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* --- Competences --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .skill-item {
+            background-color: var(--bg-card);
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            background-color: #1e3a2e;
+        }
+
+        .skill-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        /* --- Projets --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background-color: var(--bg-card);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 ratio */
+            height: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .project-info {
+            padding: 20px;
+        }
+
+        /* --- Veille --- */
+        .veille-container {
+            background-color: var(--bg-card);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .veille-highlight {
+            background-color: rgba(123, 17, 19, 0.2);
+            border: 1px solid var(--accent-red);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .outils-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .outil-item {
+            background-color: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- Contact --- */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .contact-form button {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px 0;
+            background-color: #08120d;
+        }
+
+        .social-bar img {
+            filter: invert(1);
+            transition: transform 0.2s;
+        }
+
+        .social-bar a:hover img {
+            transform: scale(1.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #050c09;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Animation Reveal --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- MEDIA QUERIES (RESPONSIVE) --- */
+        @media (max-width: 992px) {
+            .grid-2, .contact-wrapper {
+                grid-template-columns: 1fr; /* Passage en 1 colonne sur tablette/mobile */
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Navigation Mobile */
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px; /* Ajusté selon hauteur navbar */
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-dark);
+                flex-direction: column;
+                align-items: center;
+                padding: 30px 0;
+                border-bottom: 2px solid var(--accent-red);
+                box-shadow: 0 10px 10px rgba(0,0,0,0.5);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            /* Ajustements Hero Mobile */
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content img.profile-pic {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .hero-signature {
+                width: 140px; /* Plus petit sur mobile */
+            }
+
+            /* Ajustement Timeline Mobile */
+            .timeline::after {
+                left: 10px;
+            }
+            .timeline-item {
+                padding-left: 35px;
+                padding-right: 0;
+            }
+            .timeline-item::after {
+                left: 2px;
+            }
+
+            .veille-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#accueil" class="logo">RD.</a>
+
+            <div class="hamburger" onclick="toggleMenu()">☰</div>
+            
+            <div class="nav-links">
+                <a href="#accueil">Accueil</a>
+                <a href="#apropos">À Propos</a>
+                <a href="#parcours">Parcours</a>
+                <a href="#competences">Compétences</a>
+                <a href="#projets">Projets</a>
+                <a href="#veille">Veille</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="accueil">
+        <div class="hero-content reveal">
+            <img class="profile-pic" src="img/pp.jpg" alt="Rayan Dafi">
+            
+            <h1>Rayan DAFI</h1>
+            
+            <img class="hero-signature" src="img/sign.gif" alt="Signature Rayan Dafi">
+            
+            <h2>Étudiant BTS SIO - Option SLAM</h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px; max-width: 600px;">
+                Développeur en formation & Technicien Support chez PlayBac
+            </p>
+            
+            <div>
+                <a href="docs/cv_rayan_dafi.pdf" class="btn" download>Télécharger Mon CV</a>
+                <a href="#contact" class="btn btn-outline">Me Contacter</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="apropos">
+        <div class="section-title reveal">
+            <h3>Profil & Formation</h3>
+        </div>
+        <div class="grid-2 reveal">
+            <div class="card">
+                <h4 style="color: var(--accent-red); margin-bottom: 15px;">Qui suis-je ?</h4>
+                <p>Étudiant passionné en deuxième année de BTS SIO (Services Informatiques aux Organisations), spécialité SLAM.</p>
+                <br>
+                <p>Actuellement en alternance chez <strong>PlayBac</strong>, je combine apprentissage théorique et mise en pratique en entreprise, développant des solutions logicielles tout en assurant le support technique.</p>
+                <br>
+                <p><strong>Objectif :</strong> Poursuivre vers un Bac+5 en développement.</p>
+            </div>
+            <div class="card">
+                <h4 style="color: var(--accent-red); margin-bottom: 15px;">Le BTS SIO option SLAM</h4>
+                <p>Le BTS SIO forme des experts en gestion des systèmes d'information. La spécialité <strong>SLAM (Solutions Logicielles et Applications Métiers)</strong> est orientée vers le développement :</p>
+                <ul style="margin-left: 20px; margin-top: 10px; color: var(--text-muted);">
+                    <li>Conception et développement d'applications.</li>
+                    <li>Maintenance corrective et évolutive.</li>
+                    <li>Gestion de bases de données.</li>
+                </ul>
+                <p style="font-size: 0.9em; margin-top:15px; font-style: italic;">
+                    Compétences clés : C#, PHP, SQL, HTML/CSS, JavaScript, Gestion de projet Agile.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="parcours">
+        <div class="section-title reveal">
+            <h3>Parcours & Expériences</h3>
+        </div>
+        
+        <div class="grid-2">
+            <div class="reveal">
+                <h4 style="text-align: center; margin-bottom: 30px;">Formation</h4>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-date">2024 - 2026 (En cours)</span>
+                        <div class="timeline-content">
+                            <h5>BTS SIO - Option SLAM</h5>
+                            <p style="color: var(--text-muted);">École INSTA, Paris</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">2022 - 2024</span>
+                        <div class="timeline-content">
+                            <h5>Licence Physique (L1 & L2)</h5>
+                            <p style="color: var(--text-muted);">Université Paris Cité</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">2020 - 2021</span>
+                        <div class="timeline-content">
+                            <h5>P.A.S.S (Médecine)</h5>
+                            <p style="color: var(--text-muted);">Université Paris Cité</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">2020</span>
+                        <div class="timeline-content">
+                            <h5>Baccalauréat Scientifique</h5>
+                            <p style="color: var(--text-muted);">Lycée Hélène Boucher</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h4 style="text-align: center; margin-bottom: 30px;">Expériences Pro</h4>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-date">Sept 2024 - Sept 2026</span>
+                        <div class="timeline-content">
+                            <h5>Technicien Informatique & Développeur</h5>
+                            <p style="color: var(--accent-red); font-weight: bold;">PlayBac (Alternance)</p>
+                            <ul style="font-size: 0.9rem; margin-top: 10px; margin-left: 15px;">
+                                <li>Dév. application gestion personnel & inventaire.</li>
+                                <li>Maintenance parc informatique & Support.</li>
+                                <li>Gestion de bases de données.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">2021 - 2024</span>
+                        <div class="timeline-content">
+                            <h5>Assistant Manager / Caissier</h5>
+                            <p style="color: var(--text-muted);">Carrefour</p>
+                            <p style="font-size: 0.9rem;">Gestion relation client, encaissement, résolution de litiges.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="competences" style="background-color: #0e2017;">
+        <div class="section-title reveal">
+            <h3>Compétences Techniques</h3>
+        </div>
+        
+        <div class="reveal">
+            <h4 style="margin-bottom: 20px;">Langages de programmation</h4>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <img src="img/HTML.png" alt="HTML">
+                    <p>HTML5</p>
+                </div>
+                <div class="skill-item">
+                    <img src="img/CSS.png" alt="CSS">
+                    <p>CSS3</p>
+                </div>
+                <div class="skill-item">
+                    <img src="img/PHP.png" alt="PHP">
+                    <p>PHP</p>
+                </div>
+                <div class="skill-item">
+                    <img src="img/JS.png" alt="JS">
+                    <p>JavaScript</p>
+                </div>
+                <div class="skill-item">
+                    <img src="img/CS.png" alt="C#">
+                    <p>C#</p>
+                </div>
+            </div>
+            
+            <br><br>
+            
+            <h4 style="margin-bottom: 20px;">Logiciels & Outils</h4>
+            <div class="skills-grid">
+                <div class="skill-item"><img src="img/vsc.png" alt="VS Code"><p>VS Code</p></div>
+                <div class="skill-item"><img src="img/MAMP.png" alt="MAMP"><p>MAMP/WAMP</p></div>
+                <div class="skill-item"><img src="img/office365.png" alt="Office"><p>Office 365</p></div>
+                <div class="skill-item"><img src="img/windows.png" alt="Windows"><p>Windows</p></div>
+                <div class="skill-item"><img src="img/macos.png" alt="MacOS"><p>MacOS</p></div>
+            </div>
+
+            <br><br>
+            <div style="text-align: center;">
+                <p><strong>Certifications :</strong> HTML5/CSS3 (OpenClassrooms) • <em>En cours : PHP/MySQL & AWS</em></p>
+                <br>
+                <a href="docs/TDS.pdf" class="btn btn-outline" download>Tableau de Synthèse des Compétences</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="projets">
+        <div class="section-title reveal">
+            <h3>Réalisations</h3>
+        </div>
+        <div class="projects-grid reveal">
+            <div class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/8cCJ8R1TN04?si=WUgh5U11skGN7G63" allowfullscreen></iframe>
+                </div>
+                <div class="project-info">
+                    <h4>Entreprise - OnBoarding</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Application de gestion des arrivées.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/kg7YAwwUaKg?si=w6Y5gDeijl-51V3z" allowfullscreen></iframe>
+                </div>
+                <div class="project-info">
+                    <h4>Projet École - Flappy Bird</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Développement d'un jeu (1 & 2 joueurs).</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/1PNE_k91jF4?si=8ez3HbC038V9PGN6" allowfullscreen></iframe>
+                </div>
+                <div class="project-info">
+                    <h4>Projet École - Tetris</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Reproduction du classique Tetris.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/" allowfullscreen></iframe>
+                </div>
+            <div class="project-info">
+                    <h4>Projet École - Site e-commerce R-Tech</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">(Vidéo à rajouter)</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/H5wBltWJzaU?si=6WTjeExJj02ofq_T" allowfullscreen></iframe>
+                </div>
+                <div class="project-info">
+                    <h4>Projet École - FleetManager</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">(Vidéo à rajouter)</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/ZMVJpIntIdk?si=Tk6lLeXWKXj_oVAi" allowfullscreen></iframe>
+                </div>
+                <div class="project-info">
+                    <h4>Projet École - Mediathèque</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">(Vidéo à rajouter)</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/NUG-yBKWJuA?si=kfC9G_37fQ6xB7Lw" allowfullscreen></iframe>
+                </div>
+                <div class="project-info">
+                    <h4>Projet École - Blog</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">(Vidéo à rajouter)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="veille">
+        <div class="section-title reveal">
+            <h3>Veille Technologique</h3>
+        </div>
+        <div class="veille-container reveal">
+            <h4 style="color: var(--accent-red); margin-bottom: 10px;">Une veille technologique, c'est quoi ?</h4>
+            <p>Processus cyclique d'identification et d'analyse des nouveautés techniques pour anticiper les évolutions stratégiques.</p>
+            
+            <div style="margin-top: 40px; margin-bottom: 50px;">
+                <h4 style="border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px;">Mes Outils de Veille</h4>
+                <div class="outils-grid">
+                    <div class="outil-item">
+                        <h5 style="color: var(--text-muted); margin-bottom: 8px;">📡 Agrégateurs</h5>
+                        <p style="font-size: 0.9rem;">Feedly, Medium, Google Alerts, Agrégateur de flux RSS du navigateur Opéra.</p>
+                    </div>
+                    <div class="outil-item">
+                        <h5 style="color: var(--text-muted); margin-bottom: 8px;">🐦 Réseaux Sociaux</h5>
+                        <p style="font-size: 0.9rem;">X (Twitter), Instagram, LinkedIn.</p>
+                    </div>
+                    <div class="outil-item">
+                        <h5 style="color: var(--text-muted); margin-bottom: 8px;">💻 Sites Spécialisés</h5>
+                        <p style="font-size: 0.9rem;">GitHub, Clubic, 01net, Macgeneration.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4 style="color: var(--accent-red); font-size: 1.5rem; text-align: center; margin-bottom: 30px;">Sujet : L'IA Générative & l'Avenir du Développeur</h4>
+
+            <div class="veille-highlight">
+                <h5 style="font-size: 1.2rem; margin-bottom: 15px; color: white;">1. L'évolution fulgurante des outils d'assistance</h5>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">
+                    Le développement logiciel traverse une mutation historique. Nous sommes passés de simples autocompléteurs de code à de véritables systèmes intelligents capables de raisonner sur l'architecture d'un projet entier.
+                </p>
+                <ul style="font-size: 0.95rem; margin-left: 20px; line-height: 1.8;">
+                    <li><strong>Les Assistants (Copilotes) :</strong> GitHub Copilot, Claude, Gemini, ChatGPT. Ils fluidifient le quotidien (génération de fonctions, rédaction de tests unitaires, refactoring rapide).</li>
+                    <li><strong>Les Agents Autonomes :</strong> Claude Code, Lindy AI, Droidrun, Devin, Cursor. Ces outils ne se contentent plus de suggérer : ils exécutent. Ils peuvent analyser un ticket Jira, naviguer dans les fichiers, écrire le correctif, lancer les tests et proposer la "Pull Request" de manière autonome.</li>
+                </ul>
+            </div>
+
+            <div class="veille-highlight">
+                <h5 style="font-size: 1.2rem; margin-bottom: 15px; color: white;">2. La problématique : Menaces et bouleversement du métier</h5>
+                <div style="border-left: 3px solid #c83232; padding-left: 15px; margin-bottom: 15px;">
+                    <p style="font-size: 1rem; margin: 0; font-style: italic;">
+                        Face à des agents capables d'abattre en quelques minutes le travail d'une journée, le métier de développeur est-il voué à disparaître ?
+                    </p>
+                </div>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">
+                    L'automatisation soulève des défis majeurs, en particulier pour les profils débutants.
+                </p>
+                <ul style="font-size: 0.95rem; margin-left: 20px; line-height: 1.8;">
+                    <li><strong style="color: #ff6b6b;">L'automatisation du code "Boilerplate" :</strong> Le temps passé à configurer et écrire la structure de base d'une application est drastiquement réduit.</li>
+                    <li><strong style="color: #ff6b6b;">Menace sur les profils juniors :</strong> Les tâches simples (intégration basique, corrections mineures), historiquement confiées aux développeurs juniors pour les former, sont aujourd'hui absorbées instantanément par l'IA.</li>
+                    <li><strong style="color: #ff6b6b;">Démocratisation de la création :</strong> Des profils non-techniques (designers, chefs de projet) peuvent désormais générer des applications fonctionnelles via des prompts.</li>
+                </ul>
+            </div>
+
+            <div class="veille-highlight">
+                <h5 style="font-size: 1.2rem; margin-bottom: 15px; color: white;">3. La redéfinition du rôle : De l'exécutant à l'architecte</h5>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">
+                    Loin d'annoncer la fin du développeur, l'IA générative pousse le métier vers plus de supervision, d'architecture et de garantie de la qualité. L'humain reste indispensable au centre du processus.
+                </p>
+                <ul style="font-size: 0.95rem; margin-left: 20px; line-height: 1.8;">
+                    <li><strong style="color: #51cf66;">Maîtrise de la logique métier :</strong> L'IA peut coder un algorithme parfait, mais elle ne comprend ni l'intention, ni la culture d'entreprise, ni les spécificités du besoin client. L'humain fait le pont entre le besoin réel et la machine.</li>
+                    <li><strong style="color: #51cf66;">Audit et Sécurité :</strong> Les modèles de langage peuvent "halluciner" ou introduire des failles de sécurité subtiles. Le développeur devient un relecteur critique, chargé de valider et sécuriser le code généré.</li>
+                    <li><strong style="color: #51cf66;">Une vision globale :</strong> Le développeur de demain se concentrera sur la conception de l'architecture, l'optimisation des bases de données et la scalabilité des systèmes.</li>
+                </ul>
+                <hr style="border: 0; border-top: 1px solid var(--accent-red); margin: 25px 0; opacity: 0.5;">
+                <p style="font-size: 1.05rem; margin: 0; text-align: center;">
+                    <strong>Conclusion :</strong> L'IA ne remplacera pas le développeur. En revanche, <span style="color: var(--text-light); border-bottom: 2px solid var(--accent-red);">le développeur qui maîtrise l'IA remplacera celui qui s'en passe.</span>
+                </p>
+            </div>
+            
+        </div>
+    </section>
+    <section id="contact">
+        <div class="section-title reveal">
+            <h3>Contact</h3>
+        </div>
+        <div class="contact-wrapper reveal">
+            <div>
+                <h4 style="color: var(--accent-red); margin-bottom: 20px;">Mes Coordonnées</h4>
+                <p>📍 Paris / Île-de-France</p>
+                <p>📧 <a href="mailto:rayandafi28@gmail.com">rayandafi28@gmail.com</a></p>
+                <p>📞 <a href="tel:+33660155891">06 60 15 58 91</a></p>
+                <br>
+                <div style="border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color);">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.7007084218535!2d2.351974076304891!3d48.84484727133032!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e67183e07d1b5f%3A0xf8c2db1824821c7e!2sINSTA%20-%20CFA%20-%20Ecole!5e0!3m2!1sfr!2sfr!4v1750060619802!5m2!1sfr!2sfr" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <div class="card" style="border-left: none; border-top: 4px solid var(--accent-red);">
+                <form class="contact-form" action="https://formsubmit.co/rayandafi28@gmail.com" method="POST">
+                    <input type="email" name="email" placeholder="Votre Email" required>
+                    <input type="text" name="subject" placeholder="Sujet" required>
+                    <textarea name="message" rows="5" placeholder="Votre message..." required></textarea>
+                    <button type="submit" class="btn">Envoyer le message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="social-bar">
+        <a href="https://www.instagram.com/rayan.dafi/" target="_blank"><img src="img/instagram.png" width="25"></a>
+        <a href="https://github.com/raydafi" target="_blank"><img src="img/github.png" width="25"></a>
+        <a href="https://fr.linkedin.com/in/rayan-dafi-4782a7233" target="_blank"><img src="img/linkedin.png" width="25"></a>
+    </div>
+
+    <footer>
+        <p>© 2025 Rayan DAFI | Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // Gestion du Menu Burger
+        function toggleMenu() {
+            const nav = document.querySelector('.nav-links');
+            nav.classList.toggle('active');
+        }
+
+        // Fermer le menu quand on clique sur un lien (pour mobile)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const nav = document.querySelector('.nav-links');
+                if (nav.classList.contains('active')) {
+                    nav.classList.remove('active');
+                }
+            });
+        });
+
+        // Animation au scroll (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Mise à jour du lien actif au scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            document.querySelectorAll('.nav-links a').forEach(li => {
+                li.classList.remove('active');
+                if (li.getAttribute('href').includes(current)) {
+                    li.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
