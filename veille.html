@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veille Technologique | Rayan DAFI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0b1a12;
+            --bg-card: #14281f;
+            --accent-red: #7b1113;
+            --text-light: #e8ece9;
+            --text-muted: #a3b8ad;
+            --border-color: #2c4a3b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Open Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        h1, h2, h3, h4, h5 { font-family: 'Montserrat', sans-serif; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(11,26,18,0.97);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 200;
+            padding: 14px 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            border: 2px solid var(--accent-red);
+            padding: 4px 9px;
+            letter-spacing: 2px;
+        }
+
+        .logo:hover { background: var(--accent-red); }
+
+        .nav-links { display: flex; gap: 22px; align-items: center; }
+
+        .nav-links a {
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-red); }
+
+        .hamburger { display: none; cursor: pointer; font-size: 1.4rem; }
+
+        /* ── SLIDESHOW WRAPPER ── */
+        .slideshow {
+            position: fixed;
+            top: 65px; left: 0; right: 0; bottom: 0;
+            overflow: hidden;
+        }
+
+        /* Progress bar */
+        .progress {
+            position: absolute;
+            top: 0; left: 0;
+            height: 3px;
+            background: var(--accent-red);
+            transition: width 0.5s ease;
+            z-index: 10;
+        }
+
+        /* Slide counter */
+        .slide-counter {
+            position: absolute;
+            top: 18px; right: 24px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-family: 'Montserrat', sans-serif;
+            z-index: 10;
+            letter-spacing: 1px;
+        }
+
+        /* Dot navigation */
+        .dots {
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--border-color);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            border: none;
+        }
+
+        .dot.active {
+            background: var(--accent-red);
+            transform: scale(1.4);
+        }
+
+        /* Arrow buttons */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .arrow:hover { background: rgba(123,17,19,0.3); border-color: var(--accent-red); }
+        .arrow:disabled { opacity: 0.2; cursor: default; }
+        .arrow-prev { left: 20px; }
+        .arrow-next { right: 20px; }
+
+        /* ── SLIDES ── */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 120px;
+            opacity: 0;
+            transition: opacity 0.55s ease;
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Slide number tag */
+        .slide-num {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-red);
+            margin-bottom: 18px;
+        }
+
+        /* ── SLIDE 1 — Titre ── */
+        .slide-title-page {
+            text-align: center;
+            background: radial-gradient(ellipse at 60% 40%, rgba(123,17,19,0.12) 0%, transparent 60%);
+        }
+
+        .slide-title-page .tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .slide-title-page h1 {
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            line-height: 1.2;
+            max-width: 860px;
+            margin-bottom: 10px;
+        }
+
+        .slide-title-page h1 em {
+            color: var(--accent-red);
+            font-style: normal;
+        }
+
+        .slide-title-page .subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 36px;
+        }
+
+        .slide-title-page .meta {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+
+        .problematique-box {
+            margin-top: 28px;
+            border: 1px solid rgba(123,17,19,0.4);
+            border-radius: 10px;
+            padding: 16px 28px;
+            background: rgba(123,17,19,0.07);
+            max-width: 720px;
+        }
+
+        .problematique-box p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .problematique-box strong { color: var(--accent-red); }
+
+        /* ── SLIDE LAYOUT — content slides ── */
+        .slide-content {
+            width: 100%;
+            max-width: 1000px;
+            align-items: flex-start;
+        }
+
+        .slide-content h2 {
+            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            margin-bottom: 28px;
+            border-bottom: 2px solid var(--accent-red);
+            padding-bottom: 14px;
+            width: 100%;
+        }
+
+        /* ── Sources slide ── */
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .source-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px 20px;
+        }
+
+        .source-card .source-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .source-card h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-red);
+            margin-bottom: 10px;
+        }
+
+        .source-card ul { list-style: none; }
+        .source-card ul li {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(44,74,59,0.5);
+        }
+        .source-card ul li:last-child { border: none; }
+
+        /* ── Parts (I, II, III) slides ── */
+        .part-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            width: 100%;
+        }
+
+        .part-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 22px 20px;
+        }
+
+        .part-card-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-red);
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .part-card h4 {
+            font-size: 0.95rem;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        .part-card ul { list-style: none; }
+        .part-card ul li {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(44,74,59,0.4);
+            padding-left: 12px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .part-card ul li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: var(--accent-red);
+        }
+
+        .part-card ul li:last-child { border: none; }
+
+        .part-intro {
+            width: 100%;
+            margin-bottom: 22px;
+        }
+
+        .part-intro .part-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-red);
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            background: rgba(123,17,19,0.1);
+            border: 1px solid rgba(123,17,19,0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 6px;
+        }
+
+        /* ── Definition slide ── */
+        .def-layout {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .def-text p + p { margin-top: 14px; }
+        .def-text p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.75; }
+        .def-text p strong { color: var(--text-light); }
+
+        .def-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .def-visual h5 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-red);
+            margin-bottom: 16px;
+        }
+
+        .cycle-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cycle-step:last-child { border: none; }
+
+        .step-num {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .cycle-step p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+        .cycle-step p strong { color: var(--text-light); }
+
+        /* ── Conclusion slide ── */
+        .conclusion-content {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .conclusion-content .main-quote {
+            font-size: clamp(1rem, 1.9vw, 1.3rem);
+            line-height: 1.7;
+            color: var(--text-light);
+        }
+
+        .conclusion-content .main-quote strong { color: var(--accent-red); }
+
+        .conclusion-content .secondary {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            line-height: 1.7;
+        }
+
+        .conclusion-content .back-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 30px;
+            background: var(--accent-red);
+            color: #fff;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid var(--accent-red);
+        }
+
+        .conclusion-content .back-btn:hover {
+            background: transparent;
+            color: var(--accent-red);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .slide { padding: 40px 70px; }
+            .sources-grid { grid-template-columns: 1fr; }
+            .part-grid { grid-template-columns: 1fr; }
+            .def-layout { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 30px 55px; }
+            .nav-container { padding: 0 20px; }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 63px; left: 0;
+                width: 100%;
+                background: var(--bg-dark);
+                flex-direction: column;
+                align-items: center;
+                padding: 24px 0;
+                border-bottom: 2px solid var(--accent-red);
+            }
+
+            .nav-links.active { display: flex; }
+            .hamburger { display: block; }
+
+            .arrow { width: 38px; height: 38px; font-size: 1.1rem; }
+            .arrow-prev { left: 8px; }
+            .arrow-next { right: 8px; }
+        }
+
+        @media (max-width: 520px) {
+            .slide { padding: 20px 48px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">RD.</a>
+            <div class="hamburger" onclick="toggleMenu()">☰</div>
+            <div class="nav-links">
+                <a href="index.html#accueil">Accueil</a>
+                <a href="index.html#apropos">À Propos</a>
+                <a href="index.html#parcours">Parcours</a>
+                <a href="index.html#competences">Compétences</a>
+                <a href="index.html#projets">Projets</a>
+                <a href="veille.html" class="active">Veille</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="slideshow" id="slideshow">
+        <div class="progress" id="progress"></div>
+        <div class="slide-counter" id="counter">1 / 7</div>
+
+        <!-- ── Slide 1 — Titre ── -->
+        <div class="slide slide-title-page active">
+            <p class="tag">Veille Technologique · BTS SIO – Option SLAM</p>
+            <h1>Comment l'IA va-t-elle impacter<br>le futur de la <em>cybersécurité</em> ?</h1>
+            <p class="subtitle">Analyse des bénéfices, menaces et opportunités — horizon 3 ans (2025–2028)</p>
+
+        </div>
+
+        <!-- ── Slide 2 — Définition & Méthode ── -->
+        <div class="slide">
+            <div class="slide-content">
+                <p class="slide-num">01 — Définition</p>
+                <h2>Qu'est-ce que la veille technologique ?</h2>
+                <div class="def-layout">
+                    <div class="def-text">
+                        <p>
+                            La veille technologique est un <strong>processus cyclique</strong> d'identification, de collecte et d'analyse des nouveautés techniques dans un domaine donné.
+                        </p>
+                        <p>
+                            Elle permet d'<strong>anticiper les évolutions stratégiques</strong> et d'adapter ses pratiques professionnelles en conséquence.
+                        </p>
+                        <p>
+                            Dans le cadre du BTS SIO, ma veille porte sur <strong>l'Intelligence Artificielle et son impact sur la cybersécurité</strong> : un domaine en mutation rapide qui touche directement le métier de développeur et de technicien informatique.
+                        </p>
+                    </div>
+                    <div class="def-visual">
+                        <h5>Le cycle de la veille</h5>
+                        <div class="cycle-step">
+                            <div class="step-num">1</div>
+                            <p><strong>Identifier</strong> les sources pertinentes et fiables.</p>
+                        </div>
+                        <div class="cycle-step">
+                            <div class="step-num">2</div>
+                            <p><strong>Collecter</strong> les informations via flux RSS, réseaux, sites spécialisés.</p>
+                        </div>
+                        <div class="cycle-step">
+                            <div class="step-num">3</div>
+                            <p><strong>Analyser</strong> et trier les informations pertinentes.</p>
+                        </div>
+                        <div class="cycle-step">
+                            <div class="step-num">4</div>
+                            <p><strong>Diffuser</strong> et restituer les conclusions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Slide 3 — Sources ── -->
+        <div class="slide">
+            <div class="slide-content">
+                <p class="slide-num">02 — Méthode</p>
+                <h2>Comment j'effectue ma veille</h2>
+                <div class="sources-grid">
+                    <div class="source-card">
+                        <div class="source-icon">📡</div>
+                        <h4>Agrégateurs & Médias</h4>
+                        <ul>
+                            <li>Google Alert</li>
+                            <li>Medium</li>
+                            <li>Clubic / 01net / MacGeneration</li>
+                        </ul>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">Centralisation des flux RSS et articles techniques.</p>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-icon">🔐</div>
+                        <h4>Sources Cyber officielles</h4>
+                        <ul>
+                            <li>ANSSI (cert.ssi.gouv.fr)</li>
+                            <li>CERT-FR</li>
+                        </ul>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">Sources institutionnelles et rapports de threat intelligence.</p>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-icon">🐦</div>
+                        <h4>Réseaux & Communautés</h4>
+                        <ul>
+                            <li>X (Twitter)</li>
+                            <li>Instagram</li>
+                            <li>LinkedIn</li>
+                        </ul>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">Annonces en temps réel et tendances de la communauté.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Slide 4 — Partie I : Bénéfices ── -->
+        <div class="slide">
+            <div class="slide-content" style="max-width: 1060px;">
+                <p class="slide-num">03 — Analyse</p>
+                <div class="part-intro">
+                    <span class="part-label">Partie I</span>
+                    <h2 style="border: none; padding: 0; margin: 4px 0 0;">Un bénéfice majeur à la cybersécurité</h2>
+                </div>
+                <div class="part-grid">
+                    <div class="part-card">
+                        <span class="part-card-label">A — Détection des menaces</span>
+                        <h4>Analyse comportementale & Machine Learning</h4>
+                        <ul>
+                            <li>Analyse de millions d'événements en temps réel.</li>
+                            <li>Détection d'anomalies comportementales (ex : Darktrace, CrowdStrike Falcon).</li>
+                            <li>Réduction des faux positifs grâce à l'apprentissage continu.</li>
+                            <li>Identification de menaces inconnues (zero-day).</li>
+                        </ul>
+                    </div>
+                    <div class="part-card">
+                        <span class="part-card-label">B — Réponse aux incidents</span>
+                        <h4>Automatisation SOAR & remédiation</h4>
+                        <ul>
+                            <li>SOAR (Security Orchestration, Automation and Response).</li>
+                            <li>Réduction du temps de réponse de plusieurs heures à quelques secondes.</li>
+                            <li>Isolation automatique des hôtes compromis.</li>
+                            <li>Assistance aux équipes SOC 24h/24.</li>
+                        </ul>
+                    </div>
+                    <div class="part-card">
+                        <span class="part-card-label">C — Analyse prédictive</span>
+                        <h4>Threat Intelligence & anticipation</h4>
+                        <ul>
+                            <li>Anticipation des vecteurs d'attaque avant leur exploitation.</li>
+                            <li>Corrélation de données mondiales (threat feeds).</li>
+                            <li>Priorisation des vulnérabilités à patcher en urgence.</li>
+                            <li>Aide à la prise de décision stratégique de sécurité.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Slide 5 — Partie II : Menaces ── -->
+        <div class="slide">
+            <div class="slide-content" style="max-width: 1060px;">
+                <p class="slide-num">03 — Analyse</p>
+                <div class="part-intro">
+                    <span class="part-label">Partie II</span>
+                    <h2 style="border: none; padding: 0; margin: 4px 0 0;">Une menace réelle à la cybersécurité</h2>
+                </div>
+                <div class="part-grid">
+                    <div class="part-card">
+                        <span class="part-card-label">A — L'IA au service des attaquants</span>
+                        <h4>Phishing IA, deepfakes & ingénierie sociale</h4>
+                        <ul>
+                            <li>Phishing hyper-personnalisé généré par LLM.</li>
+                            <li>Deepfakes vocaux et vidéo pour l'usurpation d'identité.</li>
+                            <li>Campagnes de désinformation automatisées à grande échelle.</li>
+                            <li>Contournement des filtres anti-spam classiques.</li>
+                        </ul>
+                    </div>
+                    <div class="part-card">
+                        <span class="part-card-label">B — Automatisation des attaques</span>
+                        <h4>Malwares polymorphiques & exploitation CVE</h4>
+                        <ul>
+                            <li>Malwares qui mutent automatiquement pour éviter la détection.</li>
+                            <li>Fuzzing automatisé pour découvrir de nouvelles vulnérabilités.</li>
+                            <li>Exploitation de CVE en quelques minutes après publication.</li>
+                            <li>Démocratisation des cyberattaques (faible niveau technique requis).</li>
+                        </ul>
+                    </div>
+                    <div class="part-card">
+                        <span class="part-card-label">C — Vulnérabilités des modèles IA</span>
+                        <h4>Attaques adversariales & empoisonnement</h4>
+                        <ul>
+                            <li>Prompt injection : détournement des instructions d'un LLM.</li>
+                            <li>Data poisoning : corruption des données d'entraînement.</li>
+                            <li>Adversarial attacks : tromper les modèles de détection.</li>
+                            <li>Exfiltration de données via les modèles IA déployés.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Slide 6 — Partie III : Opportunités ── -->
+        <div class="slide">
+            <div class="slide-content" style="max-width: 1060px;">
+                <p class="slide-num">03 — Analyse</p>
+                <div class="part-intro">
+                    <span class="part-label">Partie III</span>
+                    <h2 style="border: none; padding: 0; margin: 4px 0 0;">Un puits d'opportunités pour l'avenir…</h2>
+                </div>
+                <div class="part-grid">
+                    <div class="part-card">
+                        <span class="part-card-label">A — Nouveaux métiers & compétences</span>
+                        <h4>Des profils inédits à horizon 3 ans</h4>
+                        <ul>
+                            <li>AI Security Engineer : sécuriser les pipelines IA.</li>
+                            <li>AI Red Teamer : tester la robustesse des modèles IA.</li>
+                            <li>Prompt Injection Specialist : spécialiste des vulnérabilités LLM.</li>
+                            <li>Forte montée en compétences attendue pour les profils BTS SIO.</li>
+                        </ul>
+                    </div>
+                    <div class="part-card">
+                        <span class="part-card-label">B — Synergie IA & humain</span>
+                        <h4>L'IA comme amplificateur des capacités humaines</h4>
+                        <ul>
+                            <li>Les analystes SOC augmentés par l'IA traitent 10× plus d'alertes.</li>
+                            <li>L'IA gère le volume ; l'humain gère le contexte et le jugement.</li>
+                            <li>Collaboration homme-machine comme nouveau standard en cyberdéfense.</li>
+                            <li>Formation et montée en compétence accélérées par l'IA.</li>
+                        </ul>
+                    </div>
+                    <div class="part-card">
+                        <span class="part-card-label">C — Réglementations & standards</span>
+                        <h4>Encadrement légal et normes émergentes</h4>
+                        <ul>
+                            <li>EU AI Act (2024) : classification des risques des systèmes IA.</li>
+                            <li>ISO/IEC 42001 : premier standard international de management de l'IA.</li>
+                            <li>Recommandations ANSSI sur l'IA en contexte de sécurité.</li>
+                            <li>Opportunité : les entreprises conformes gagnent en confiance.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Slide 7 — Conclusion ── -->
+        <div class="slide">
+            <div class="conclusion-content">
+                <p class="slide-num">04 — Conclusion</p>
+                <p class="main-quote">
+                    L'IA est à la fois le <strong>bouclier</strong> et la <strong>lance</strong><br>
+                    de la cybersécurité de demain.
+                </p>
+                <p class="secondary">
+                    À horizon 3 ans, les organisations qui sauront intégrer l'IA dans leur stratégie de défense seront les mieux armées — mais cette intégration devra être <strong style="color: var(--text-light);">éthique, encadrée et humainement supervisée</strong>.
+                    <br><br>
+                    Pour un futur développeur ou technicien BTS SIO, maîtriser ces enjeux n'est plus une option : c'est une compétence clé du métier de demain.
+                </p>
+                <a href="index.html" class="back-btn">← Retour au portfolio</a>
+            </div>
+        </div>
+
+        <!-- Arrows -->
+        <button class="arrow arrow-prev" id="btn-prev" onclick="changeSlide(-1)" disabled>‹</button>
+        <button class="arrow arrow-next" id="btn-next" onclick="changeSlide(1)">›</button>
+
+        <!-- Dots -->
+        <div class="dots" id="dots"></div>
+    </div>
+
+    <script>
+        const TOTAL = 7;
+        let current = 0;
+
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const counter = document.getElementById('counter');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const dotsEl = document.getElementById('dots');
+
+        // Build dots
+        for (let i = 0; i < TOTAL; i++) {
+            const d = document.createElement('button');
+            d.className = 'dot' + (i === 0 ? ' active' : '');
+            d.setAttribute('aria-label', `Slide ${i + 1}`);
+            d.onclick = () => goTo(i);
+            dotsEl.appendChild(d);
+        }
+
+        function goTo(n) {
+            slides[current].classList.remove('active');
+            current = Math.max(0, Math.min(n, TOTAL - 1));
+            slides[current].classList.add('active');
+            update();
+        }
+
+        function changeSlide(dir) { goTo(current + dir); }
+
+        function update() {
+            counter.textContent = `${current + 1} / ${TOTAL}`;
+            progress.style.width = `${((current + 1) / TOTAL) * 100}%`;
+            btnPrev.disabled = current === 0;
+            btnNext.disabled = current === TOTAL - 1;
+            document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+            if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+        });
+
+        // Touch swipe
+        let touchX = 0;
+        document.getElementById('slideshow').addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+        document.getElementById('slideshow').addEventListener('touchend',   e => {
+            const dx = e.changedTouches[0].clientX - touchX;
+            if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+        });
+
+        // Mobile menu
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+
+        update();
+    </script>
+</body>
+</html>
